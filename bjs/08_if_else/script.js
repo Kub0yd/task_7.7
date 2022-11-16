@@ -39,8 +39,8 @@ document.getElementById('btnOver').addEventListener('click', function () {
 
 document.getElementById('btnEqual').addEventListener('click', function () {
     if (gameRun){
-        answerField.innerText = `Я всегда угадываю\n\u{1F60E}`
-        gameRun = false;
+        answerField.innerText = `Я всегда угадываю\n\u{1F60E}`;
+        gameRun = false; //test
     }
 })
 
