@@ -1,57 +1,69 @@
 $(window).on('load', function(){        
-    $('#ModalCenter').modal('show');
-    $(".alert").hide();
-     }); 
+    $('#ModalCenter').modal('show'); //При запуске показываем модальное окно с выбором вариантов
+    $(".alert").hide(); //Скрываем алерты
+     });
+//Объявляем переменные
 let answerNumber = 0;    
 let orderNumber = 0;
 let gameRun = false;
 let minValue = 0;
 let maxValue = 0;
-let alertText = document.querySelector('.alert span');
-const InputMin = document.querySelector('#min-value');
-const InputMax = document.querySelector('#max-value');
-
+let alertText = document.querySelector('.alert span');//Селектор текста алерта (модальное окно)
+let gameAlertText = document.querySelector('#game-alert-text');//Селектор текста алерта (окно игры)
+//let InputMin = document.getElementById('btnRetry')
+let InputMin = document.querySelector('#min-value');//Селектор поля мин.значение
+let InputMax = document.querySelector('#max-value');//Селектор поля макс.значение
 const orderNumberField = document.getElementById('orderNumberField'); //поле Вопрос №
-const answerField = document.getElementById('answerField');//поле  "Вы загадали число"
-document.querySelector('.btn-primary').addEventListener('click', () => {
-     
-    if (parseInt(InputMin.value)>= parseInt(InputMax.value)){ //Алерт
-        
+const answerField = document.getElementById('answerField');//поле ответа
+//Обработка кнопки Сохранить в модальном окне
+document.querySelector('.btn-primary').addEventListener('click', () => {    
+    if (parseInt(InputMin.value)>= parseInt(InputMax.value)){ 
         alertText.textContent = "Минимальное число должно быть больше максимального!"
-        $(".alert").show();
-        return;
+        $("#modal-alert").show();
     } else if (isNaN(parseInt(InputMin.value)) || isNaN(parseInt(InputMax.value)) ){
-        alertText.textContent = "Введите числа корректно!"
-        $(".alert").show();
+        InputMin.value = 0;
+        InputMax.value = 100;
+        alertText.textContent = "Некоторые числа неопределены. Полям будут установлены стандартные значения."
+        $("#modal-alert").show();
     } else if (parseInt(InputMin.value) < parseInt(InputMax.value)) {
-        minValue = parseInt(InputMin.value);
-        maxValue = parseInt(InputMax.value);
+
+        ((parseInt(InputMin.value) < -999) && (parseInt(InputMax.value) > 999)) ? 
+            (minValue  = -999,
+            maxValue = 999,
+            gameAlertText.textContent = `Границы значений превышены, минимальное значение будет выставлено на ${minValue},
+            а максимальное на ${maxValue}`,
+            $("#game-alert").show()) :
+                (parseInt(InputMin.value) < -999) ? 
+                    (minValue  = -999,
+                    gameAlertText.textContent = `Минимальное значение превышено, его значение будет установлено на ${minValue}`,
+                    $("#game-alert").show()) :
+                      (parseInt(InputMax.value) > 999) ? 
+                        (maxValue = 999,
+                        gameAlertText.textContent = `Максимальное значение превышено, его значение будет установлено на ${maxValue}`,
+                        $("#game-alert").show()) :
+                        (maxValue = parseInt(InputMax.value),
+                        minValue = parseInt(InputMin.value),
+                        $(".alert").hide());
+
         answerNumber  = Math.floor((minValue + maxValue) / 2); //округление числа до целых в меньшую сторону 
         orderNumber = 1;
         gameRun = true;
         $('#ModalCenter').modal('hide');
         orderNumberField.innerText = orderNumber;
         answerField.innerText = `Вы загадали число ${answerNumber }?`;
-    }
+        }
+    //}
 })
-//let minValue = parseInt(prompt('Минимальное знание числа для игры','0')); //приводим строку в число
-//let maxValue = parseInt(prompt('Максимальное знание числа для игры','100'));
-//alert(`Загадайте любое целое число от ${minValue} до ${maxValue}, а я его угадаю`);
-// let answerNumber  = 2;//Math.floor((minValue + maxValue) / 2); //округление числа до целых в меньшую сторону 
-// let orderNumber = 1;
-// let gameRun = true;
-
  // Кнопка заново
 document.getElementById('btnRetry').addEventListener('click', function () {
     $('#ModalCenter').modal('show');
     minValue = 0;
     maxValue = 100;
     orderNumber = 0;
+    gameRun = false;
 })
-
+//Обработка кнопки "Больше"
 document.getElementById('btnOver').addEventListener('click', function () {
-    console.log(minValue);
-    console.log(gameRun);
     if (gameRun){
         if (minValue === maxValue){
             const phraseRandom = Math.round( Math.random() * 2);
@@ -77,7 +89,7 @@ document.getElementById('btnOver').addEventListener('click', function () {
         }
     }
 })
-//
+//Обработка кнопки "Меньше"
 document.getElementById('btnLess').addEventListener('click', function () {
     if (gameRun){
         if (minValue === maxValue){
@@ -104,15 +116,14 @@ document.getElementById('btnLess').addEventListener('click', function () {
         }
     }
 })
-
+//Обработка кнопки "Верно"
 document.getElementById('btnEqual').addEventListener('click', function () {
     if (gameRun){
-
         const phraseRandom = Math.round( Math.random() * 2);
         const answerPhrase = (phraseRandom === 0) ?
             `Я всегда угадываю\n\u{1F60E}` : (phraseRandom === 1) ?
             `Это было легко\n\u{1F60F}`:
-            `Снова победа! Приходите еще!\n\u{1F605}`;
+            `Снова победа! Старайтесь лучше!\n\u{1F605}`;
 
         answerField.innerText = answerPhrase;
         gameRun = false; 
