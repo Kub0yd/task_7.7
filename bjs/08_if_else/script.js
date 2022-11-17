@@ -104,16 +104,19 @@ document.getElementById('btnLess').addEventListener('click', function () {
         } else {
             maxValue = answerNumber - 1;
             answerNumber  = Math.ceil((minValue + maxValue) / 2);
+            let answer = toWord();
+            console.log(answer);
             orderNumber++;
             orderNumberField.innerText = orderNumber;
             const phraseRandom = Math.round( Math.random() * 2);
             const answerPhrase = (phraseRandom === 0) ?
-                `Вы загадали число ${answerNumber }?` : (phraseRandom === 1) ?
-                `Наверное это число ${answerNumber }`:
-                `Непростая задача, но это ${answerNumber }?..`;
+                `Вы загадали число ${answer }?` : (phraseRandom === 1) ?
+                `Наверное это число ${answer }`:
+                `Непростая задача, но это ${answer }?..`;
 
             answerField.innerText = answerPhrase;
         }
+        console.log(answerNumber);
     }
 })
 //Обработка кнопки "Верно"
@@ -130,3 +133,18 @@ document.getElementById('btnEqual').addEventListener('click', function () {
     }
 })
 
+let units = ["один","два","три","четыре","пять","шесть","семь","восемь","девять"];
+let desunits = ["десять","одиннадцать","двенадцать","тринадцать","четырнадцать","пятнадцать","шестнадцать","семнадцать","восемнадацть","девятнадцать",] 
+let des =["двадцать","тридцать","сорок","пятьдесят","шестьдесят","семьдесят","восемьдесят","девяносто"];
+let hund = ["сто","двести","триста","четыреста","пятьсот","шестьсот","семьсот","восемьсот","девятьсот"];
+
+function toWord() {
+    let answer = String(answerNumber);
+    if (answer.length === 2) {
+        wordAnswer = desunits[answer[1]];
+    }
+    if (answer.length === 1) {
+        wordAnswer = units[answer[0]-1];
+    }
+    return wordAnswer;
+}
