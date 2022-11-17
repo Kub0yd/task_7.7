@@ -1,4 +1,16 @@
+div.field {
+    clear: both;
+    text-align:right;
+    line-height:25px;
+  }
+  div.field label { 
+    float: left;
+  }
+
 .game-card {
     height: 100vh;
     font-family: 'Open Sans', monospace;
 }
+/* .alert-warning {
+  margin-top: -20px;
+} */
