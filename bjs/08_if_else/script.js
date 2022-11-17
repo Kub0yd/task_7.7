@@ -1,35 +1,38 @@
 $(window).on('load', function(){        
     $('#ModalCenter').modal('show');
+    $(".alert").hide();
      }); 
-
 let answerNumber = 0;    
 let orderNumber = 0;
 let gameRun = false;
-
+let minValue = 0;
+let maxValue = 0;
+let alertText = document.querySelector('.alert span');
 const InputMin = document.querySelector('#min-value');
 const InputMax = document.querySelector('#max-value');
+
+const orderNumberField = document.getElementById('orderNumberField'); //поле Вопрос №
+const answerField = document.getElementById('answerField');//поле  "Вы загадали число"
 document.querySelector('.btn-primary').addEventListener('click', () => {
      
-    if (parseInt(InputMin.value)>= parseInt(InputMax.value)){
-        $('.btn-primary').popover({
-            content: 'Минимальное значение должно быть меньше максимального!'
-        })
+    if (parseInt(InputMin.value)>= parseInt(InputMax.value)){ //Алерт
+        
+        alertText.textContent = "Минимальное число должно быть больше максимального!"
+        $(".alert").show();
         return;
     } else if (isNaN(parseInt(InputMin.value)) || isNaN(parseInt(InputMax.value)) ){
-        alert('sdsdsd')
+        alertText.textContent = "Введите числа корректно!"
+        $(".alert").show();
     } else if (parseInt(InputMin.value) < parseInt(InputMax.value)) {
-        let minValue = parseInt(InputMin.value);
-        let maxValue = parseInt(InputMax.value);
+        minValue = parseInt(InputMin.value);
+        maxValue = parseInt(InputMax.value);
         answerNumber  = Math.floor((minValue + maxValue) / 2); //округление числа до целых в меньшую сторону 
         orderNumber = 1;
         gameRun = true;
         $('#ModalCenter').modal('hide');
-        console.log('minValue = '+ minValue);
-        console.log('maxValue = '+ maxValue);
-        console.log(InputMin);
-        console.log(InputMax.value);
+        orderNumberField.innerText = orderNumber;
+        answerField.innerText = `Вы загадали число ${answerNumber }?`;
     }
-    //console.log((parseInt(InputMax.value) = NaN))
 })
 //let minValue = parseInt(prompt('Минимальное знание числа для игры','0')); //приводим строку в число
 //let maxValue = parseInt(prompt('Максимальное знание числа для игры','100'));
@@ -38,11 +41,6 @@ document.querySelector('.btn-primary').addEventListener('click', () => {
 // let orderNumber = 1;
 // let gameRun = true;
 
-const orderNumberField = document.getElementById('orderNumberField'); //поле Вопрос №
-const answerField = document.getElementById('answerField');//поле  "Вы загадали число"
-
-orderNumberField.innerText = orderNumber;
-answerField.innerText = `Вы загадали число ${answerNumber }?`;
  // Кнопка заново
 document.getElementById('btnRetry').addEventListener('click', function () {
     $('#ModalCenter').modal('show');
@@ -52,12 +50,15 @@ document.getElementById('btnRetry').addEventListener('click', function () {
 })
 
 document.getElementById('btnOver').addEventListener('click', function () {
+    console.log(minValue);
+    console.log(gameRun);
     if (gameRun){
         if (minValue === maxValue){
-            const phraseRandom = Math.round( Math.random());
-            const answerPhrase = (phraseRandom === 1) ?
-                `Вы загадали неправильное число!\n\u{1F914}` :
-                `Я сдаюсь..\n\u{1F92F}`;
+            const phraseRandom = Math.round( Math.random() * 2);
+            const answerPhrase = (phraseRandom === 0) ?
+                `Вы загадали неправильное число!\n\u{1F914}` : (phraseRandom === 1) ?
+                `Я сдаюсь..\n\u{1F92F}` :
+                `Вы жульничаете?!\n\u{1F611}`;
 
             answerField.innerText = answerPhrase;
             gameRun = false;
@@ -66,7 +67,13 @@ document.getElementById('btnOver').addEventListener('click', function () {
             answerNumber  = Math.floor((minValue + maxValue) / 2);
             orderNumber++;
             orderNumberField.innerText = orderNumber;
-            answerField.innerText = `Вы загадали число ${answerNumber }?`;
+            const phraseRandom = Math.round( Math.random() * 2);
+            const answerPhrase = (phraseRandom === 0) ?
+                `Вы загадали число ${answerNumber }?` : (phraseRandom === 1) ?
+                `Наверное это число ${answerNumber }`:
+                `Непростая задача, но это ${answerNumber }?..`;
+
+            answerField.innerText = answerPhrase;
         }
     }
 })
@@ -74,10 +81,11 @@ document.getElementById('btnOver').addEventListener('click', function () {
 document.getElementById('btnLess').addEventListener('click', function () {
     if (gameRun){
         if (minValue === maxValue){
-            const phraseRandom = Math.round( Math.random());
-            const answerPhrase = (phraseRandom === 1) ?
-                `Вы загадали неправильное число!\n\u{1F914}` :
-                `Я сдаюсь..\n\u{1F92F}`;
+            const phraseRandom = Math.round( Math.random() * 2);
+            const answerPhrase = (phraseRandom === 0) ?
+                `Вы загадали неправильное число!\n\u{1F914}` : (phraseRandom === 1) ?
+                `Я сдаюсь..\n\u{1F92F}`:
+                `Вы жульничаете?!\n\u{1F611}`;
 
             answerField.innerText = answerPhrase;
             gameRun = false;
@@ -86,14 +94,27 @@ document.getElementById('btnLess').addEventListener('click', function () {
             answerNumber  = Math.ceil((minValue + maxValue) / 2);
             orderNumber++;
             orderNumberField.innerText = orderNumber;
-            answerField.innerText = `Вы загадали число ${answerNumber }?`;
+            const phraseRandom = Math.round( Math.random() * 2);
+            const answerPhrase = (phraseRandom === 0) ?
+                `Вы загадали число ${answerNumber }?` : (phraseRandom === 1) ?
+                `Наверное это число ${answerNumber }`:
+                `Непростая задача, но это ${answerNumber }?..`;
+
+            answerField.innerText = answerPhrase;
         }
     }
 })
 
 document.getElementById('btnEqual').addEventListener('click', function () {
     if (gameRun){
-        answerField.innerText = `Я всегда угадываю\n\u{1F60E}`;
+
+        const phraseRandom = Math.round( Math.random() * 2);
+        const answerPhrase = (phraseRandom === 0) ?
+            `Я всегда угадываю\n\u{1F60E}` : (phraseRandom === 1) ?
+            `Это было легко\n\u{1F60F}`:
+            `Снова победа! Приходите еще!\n\u{1F605}`;
+
+        answerField.innerText = answerPhrase;
         gameRun = false; 
     }
 })
