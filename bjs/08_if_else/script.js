@@ -46,7 +46,7 @@ document.querySelector('.btn-primary').addEventListener('click', () => {
                         $(".alert").hide());
 
         answerNumber  = Math.floor((minValue + maxValue) / 2); //округление числа до целых в меньшую сторону 
-        let answer = toWord();
+        let answer = toWord();  //Подставляем текстовое представление числа
         orderNumber = 1;
         gameRun = true;
         $('#ModalCenter').modal('hide');
@@ -78,7 +78,7 @@ document.getElementById('btnOver').addEventListener('click', function () {
         } else {
             minValue = answerNumber  + 1;
             answerNumber  = Math.floor((minValue + maxValue) / 2);
-            let answer = toWord();
+            let answer = toWord();  //Подставляем текстовое представление числа
             orderNumber++;
             orderNumberField.innerText = orderNumber;
             const phraseRandom = Math.round( Math.random() * 2);
@@ -106,7 +106,7 @@ document.getElementById('btnLess').addEventListener('click', function () {
         } else {
             maxValue = answerNumber - 1;
             answerNumber  = Math.ceil((minValue + maxValue) / 2);
-            let answer = toWord();
+            let answer = toWord(); //Подставляем текстовое представление числа
             console.log(answer);
             orderNumber++;
             orderNumberField.innerText = orderNumber;
@@ -135,26 +135,53 @@ document.getElementById('btnEqual').addEventListener('click', function () {
     }
 })
 
-let units = ["один","два","три","четыре","пять","шесть","семь","восемь","девять"];
-let desunits = ["десять","одиннадцать","двенадцать","тринадцать","четырнадцать","пятнадцать","шестнадцать","семнадцать","восемнадацть","девятнадцать",] 
+let units = ["ноль","один","два","три","четыре","пять","шесть","семь","восемь","девять"];
+let desunits = ["десять","одиннадцать","двенадцать","тринадцать","четырнадцать","пятнадцать","шестнадцать","семнадцать","восемнадцать","девятнадцать",] 
 let des =["двадцать","тридцать","сорок","пятьдесят","шестьдесят","семьдесят","восемьдесят","девяносто"];
 let hund = ["сто","двести","триста","четыреста","пятьсот","шестьсот","семьсот","восемьсот","девятьсот"];
 
 function toWord() {
     let answer = String(answerNumber);
-    if (answer.length === 2) {                              //Если длина числа 2 (10,64 и т.п)
-        if (answer[0] = 1) {                                //Если первая цифра числа = 1
-            wordAnswer = desunits[answer[1]]                //Тогда берем значение из массива с индексом равным второй цифре числа (15 - берем индекс 5)
-        }else {                                             //Если первая цифра числа не 1
-            let firstNum = answer[0];                       //Вводим переменную, равную первой цифре числа
-            let secNum = answer[1];
-            //Если вторая цифра ноль, берем просто значение из массива des, иначе прибавляем к des значение из units
-            (secNum === 0) ? (wordAnswer = des[firstNum - 2]) : (wordAnswer = des[firstNum - 2]+ ' ' + units[answer[1]])
+    let minus = '-';
+    let isMinus;
+    let hundNum;
+   
+    if (answer.includes(minus)){
+        answer = answer.replace('-', '');   //Если число содержит минус, вырежим его
+        isMinus = true;                     //Если есть минус, поставим переменную в true
+    }else {
+        isMinus = false;
+    }
+    if  (answer.length === 3){
+        hundNum = answer[0];
+        answer =  answer.replace(hundNum, '')
+    }
+    if (answer.length === 2) {                                    //Если длина числа 2 (10,64 и т.п)
+        if (answer[0] == 1) {                                     //Если первая цифра числа = 1
+            (!isMinus) ? wordAnswer = desunits[answer[1]] :       //Тогда берем значение из массива с индексом равным второй цифре числа (15 - берем индекс 5)
+            wordAnswer ='минус ' + desunits[answer[1]];           //Если есть минус - ставим префикс "минус" 
+        }else {                                                   //Если первая цифра числа не 1
+            let firstNum = answer[0];                             //Вводим переменную, равную первой цифре числа
+            let secNum = answer[1];                               //Вводим переменную, равную второй цифре числа
+            //Если вторая цифра ноль, берем значение из массива des, иначе прибавляем к des значение из units
+            //Идет проверка на отрицательное значение
+            (secNum == 0) ? ((!isMinus) ? wordAnswer = des[firstNum - 2] : wordAnswer = "минус " + des[firstNum - 2]) : 
+            ((!isMinus) ? (wordAnswer = des[firstNum - 2]+ ' ' + units[answer[1]]) : (wordAnswer = 'минус ' + des[firstNum - 2]+ ' ' + units[answer[1]]))
         }
+    }else if (answer.length === 1) {
+        (!isMinus) ? wordAnswer = units[answer[0]] : wordAnswer ='минус ' + units[answer[0]] ;
+    }
+    //Представление ряда сотен решил добавлять к значению десятков, для этого ввел переменную isHund, которая становится true если длина входящего числа = 3
+    if (!!hundNum) {  //Проверка определена ли переменная, отвечающая за сотни
+        if (wordAnswer[0] == 0 && wordAnswer[0] == 0){
+                    //вставить код на круглые числа
+        }else {
+          (!isMinus) ? (wordAnswer = hund[hundNum-1] + ' ' + wordAnswer) : (
+           wordAnswer = wordAnswer.replace(' ', ` ${hund[hundNum-1]} `))  //Если есть слово "минус" заменяем пробел после него на пробел+текст сотен
+        } 
+        
+        
+    }
 
-    }
-    if (answer.length === 1) {
-        wordAnswer = units[answer[0]-1];
-    }
     return wordAnswer;
 }
