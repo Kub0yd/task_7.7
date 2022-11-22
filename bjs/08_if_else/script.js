@@ -128,7 +128,7 @@ document.getElementById('btnEqual').addEventListener('click', function () {
         const answerPhrase = (phraseRandom === 0) ?
             `Я всегда угадываю\n\u{1F60E}` : (phraseRandom === 1) ?
             `Это было легко\n\u{1F60F}`:
-            `Снова победа! Старайтесь лучше!\n\u{1F605}`;
+            `Снова победа!\n\u{1F605}`;
 
         answerField.innerText = answerPhrase;
         gameRun = false; 
@@ -173,8 +173,10 @@ function toWord() {
     }
     //Представление ряда сотен решил добавлять к значению десятков, для этого ввел переменную isHund, которая становится true если длина входящего числа = 3
     if (!!hundNum) {  //Проверка определена ли переменная, отвечающая за сотни
-        if (wordAnswer[0] == 0 && wordAnswer[0] == 0){
-                    //вставить код на круглые числа
+        if (answer % 100 === 0) {   //если остаток от деления равен 0 значит круглое число (100,200 и т.д.)
+            (!isMinus) ? (wordAnswer = hund[hundNum-1]) : (wordAnswer = 'минус ' + hund[hundNum-1] )  
+        }else if (answer % 100 !== 0 && answer % 100 < 10 ) {
+            (!isMinus) ? (wordAnswer = hund[hundNum-1] + ' '+ units[answer % 100 ]) : (wordAnswer = 'минус ' + hund[hundNum-1] + ' '+ units[answer % 100 ])
         }else {
           (!isMinus) ? (wordAnswer = hund[hundNum-1] + ' ' + wordAnswer) : (
            wordAnswer = wordAnswer.replace(' ', ` ${hund[hundNum-1]} `))  //Если есть слово "минус" заменяем пробел после него на пробел+текст сотен

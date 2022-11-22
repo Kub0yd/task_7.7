@@ -1,3 +1,6 @@
+body {
+  background-image: url(https://img.freepik.com/free-vector/white-abstract-background-design_23-2148825582.jpg?w=1380&t=st=1669129042~exp=1669129642~hmac=57f847321ec4837def692965fa7b13a63956d4b68ce65877bda7654b582d2412);
+}
 div.field {
     clear: both;
     text-align:right;
@@ -8,9 +11,21 @@ div.field {
   }
 
 .game-card {
-    height: 100vh;
-    font-family: 'Open Sans', monospace;
+    height: 85vh;
+    font-family: 'Trattatello', monospace;
+    font-weight: normal;
 }
-/* .alert-warning {
-  margin-top: -20px;
-} */
+.btn-info {
+  background-color: rgb(78, 13, 153);
+  border: 1px solid black;
+}
+.card {
+  border: 1px solid rgb(78, 78, 78);
+}
+.btn-info:hover,
+.btn-info:focus, 
+.btn-info:active{
+  background-color: rgb(48, 9, 92) !important;
+  border: 1px solid black;
+  box-shadow: none !important;
+}
