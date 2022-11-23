@@ -10,7 +10,6 @@ let minValue = 0;
 let maxValue = 0;
 let alertText = document.querySelector('.alert span');//Селектор текста алерта (модальное окно)
 let gameAlertText = document.querySelector('#game-alert-text');//Селектор текста алерта (окно игры)
-//let InputMin = document.getElementById('btnRetry')
 let InputMin = document.querySelector('#min-value');//Селектор поля мин.значение
 let InputMax = document.querySelector('#max-value');//Селектор поля макс.значение
 const orderNumberField = document.getElementById('orderNumberField'); //поле Вопрос №
@@ -45,7 +44,7 @@ document.querySelector('.btn-primary').addEventListener('click', () => {
                         minValue = parseInt(InputMin.value),
                         $(".alert").hide());
 
-        answerNumber  = Math.floor((minValue + maxValue) / 2); //округление числа до целых в меньшую сторону 
+        answerNumber  = Math.floor((minValue + maxValue) / 2); 
         let answer = toWord();  //Подставляем текстовое представление числа
         orderNumber = 1;
         gameRun = true;
@@ -107,7 +106,6 @@ document.getElementById('btnLess').addEventListener('click', function () {
             maxValue = answerNumber - 1;
             answerNumber  = Math.ceil((minValue + maxValue) / 2);
             let answer = toWord(); //Подставляем текстовое представление числа
-            console.log(answer);
             orderNumber++;
             orderNumberField.innerText = orderNumber;
             const phraseRandom = Math.round( Math.random() * 2);
@@ -118,7 +116,6 @@ document.getElementById('btnLess').addEventListener('click', function () {
 
             answerField.innerText = answerPhrase;
         }
-        console.log(answerNumber);
     }
 })
 //Обработка кнопки "Верно"
@@ -143,8 +140,8 @@ let hund = ["сто","двести","триста","четыреста","пят�
 function toWord() {
     let answer = String(answerNumber);
     let minus = '-';
-    let isMinus;
-    let hundNum;
+    let isMinus;        //переменная для отметки отрицательного числа
+    let hundNum;        //переменная для отметки сотен       
    
     if (answer.includes(minus)){
         answer = answer.replace('-', '');   //Если число содержит минус, вырежим его
