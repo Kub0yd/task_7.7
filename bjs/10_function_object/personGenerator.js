@@ -1,6 +1,6 @@
 const personGenerator = {
     surnameJson: `{  
-        "count": 15,
+        "count": 16,
         "list": {
             "id_1": "Иванов",
             "id_2": "Смирнов",
@@ -17,7 +17,7 @@ const personGenerator = {
             "id_13": "Степанов",
             "id_14": "Павлов",
             "id_15": "Александров",
-            "id_16": "Морозов"
+            "id_16": "Аменюков"
         }
     }`,
     firstNameMaleJson: `{
@@ -50,7 +50,51 @@ const personGenerator = {
             "id_10": "Ярослава"
         }
     }`,
-
+    patronymicJson: `{
+        "count": 11,
+        "list": {     
+            "id_1": "Александров",
+            "id_2": "Максимов",
+            "id_3": "Иванов",
+            "id_4": "Артемов",
+            "id_5": "Дмитриев",
+            "id_6": "Сергеев",
+            "id_7": "Михаилов",
+            "id_8": "Даниилов",
+            "id_9": "Егоров",
+            "id_10": "Андреев",
+            "id_11": "Игорев"
+        }
+    }`,
+    jobsJson: `{
+        "count": 7,
+        "list": {     
+            "id_1": "Программист",
+            "id_2": "Строитель",
+            "id_3": "Военнослужащий",
+            "id_4": "Дизайнер",
+            "id_5": "Актёр",
+            "id_6": "Арт-директор",
+            "id_7": "Документовед"
+        }
+    }`,
+    monthsJson: `{
+        "count": 12,
+        "list": {     
+            "id_1": "января",
+            "id_2": "февраля",
+            "id_3": "марта",
+            "id_4": "апреля",
+            "id_5": "мая",
+            "id_6": "июня",
+            "id_7": "июля",
+            "id_8": "августа",
+            "id_9": "сентября",
+            "id_10": "октября",
+            "id_11": "ноября",
+            "id_12": "декабря"
+        }
+    }`,
     GENDER_MALE: 'Мужчина',
     GENDER_FEMALE: 'Женщина',
 
@@ -84,10 +128,10 @@ const personGenerator = {
     // получакм случайный день
     randomDateDay:function () {
         let day;
-        const mounth = this.person.mounth;
-        if  (mounth == 1 || mounth == 3 || mounth == 4 || mounth == 7 || mounth == 8 || mounth == 10 || mounth == 12){ //Проверка на месяц, в котором 31 день
+        const month = this.person.month;
+        if  (month == 1 || month == 3 || month == 4 || month == 7 || month == 8 || month == 10 || month == 12){ //Проверка на месяц, в котором 31 день
             day = this.randomIntNumber(31, 1);
-        } else if (mounth == 2) {
+        } else if (month == 2) {
             (this.person.year % 4 == 0) ? (day = this.randomIntNumber(29, 1)) : (day = this.randomIntNumber(28, 1)); //Проверка на високосную дату
         }else { //месяц в котором 30 дней 
             day = this.randomIntNumber(30, 1);
@@ -95,12 +139,35 @@ const personGenerator = {
         return day;
     },
     //Получаем случайное число месяца
-    randomDateMounth:function () {
+    randomDatemonth:function () {
         return this.randomIntNumber(12, 1);
     },
     //Получаем случайный год рождения
     randomDateYear:function () {
         return this.randomIntNumber(2022, 1930);
+    },
+    //генератор отчества, зависит от пола
+    randomPatronymic: function () {
+      let patronymic = this.randomValue(this.patronymicJson);
+      (this.person.gender == personGenerator.GENDER_MALE) ? (patronymic = patronymic + "ич") : (patronymic = patronymic + "на")
+      return patronymic;
+    },
+    //генератор работы
+    randomJob: function () {
+        let job = this.randomValue(this.jobsJson);                      //переменная для сгенерированной работы
+        if (this.person.gender == personGenerator.GENDER_FEMALE){       //для женского пола идет проверка
+            while (job == "Строитель" || job == "Военнослужащий") {     //пока работа "строитель" или "военнослужащий" заново идет генерация работы
+                job = this.randomValue(this.jobsJson);
+            }
+            return job;
+        }else {
+            return job;
+        } 
+    },
+    monthToText: function () {
+        const month = JSON.parse(this.monthsJson);
+        const propmonth = `id_${this.person.month}`; 
+        return month.list[propmonth];
     },
 
     getPerson: function () {
@@ -110,11 +177,14 @@ const personGenerator = {
         (this.person.gender == personGenerator.GENDER_MALE) ?        
             (this.person.surname = this.randomSurname()) : (this.person.surname = this.randomSurname() + "а") ;
         this.person.year = this.randomDateYear();
-        this.person.mounth = this.randomDateMounth();
+        this.person.month = this.randomDatemonth();
+        this.person.monthText = this.monthToText();
         this.person.day = this.randomDateDay();
-        console.log( this.person.year);
-        console.log(typeof(this.person.day));
-        console.log(typeof(this.person.mounth));
+        this.person.patronymic = this.randomPatronymic();
+        (this.person.year > 1962 && this.person.year < 2004) ? 
+            (this.person.job = this.randomJob()) : (this.person.job = 'Нет'); //наличие работы ограничено датой рождения
+
         return this.person;
     }
 };
+
