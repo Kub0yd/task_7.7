@@ -1,0 +1,22 @@
+body {
+    background-image: url(https://img.freepik.com/free-vector/white-abstract-background-design_23-2148825582.jpg?w=1380&t=st=1669129042~exp=1669129642~hmac=57f847321ec4837def692965fa7b13a63956d4b68ce65877bda7654b582d2412);
+  }
+.buttons {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    width: 80%;
+}
+.game-card {
+    height: 85vh;
+}
+.card {
+    border-radius: 25px; 
+}
+.col p {
+    margin: 5px;
+}
+#secondary-info {
+    border-top: 1px dashed grey;
+    
+}

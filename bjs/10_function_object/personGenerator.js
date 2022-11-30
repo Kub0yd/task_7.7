@@ -26,7 +26,7 @@ const personGenerator = {
             "id_1": "Александр",
             "id_2": "Максим",
             "id_3": "Иван",
-            "id_4": "Артем",
+            "id_4": "Артём",
             "id_5": "Дмитрий",
             "id_6": "Никита",
             "id_7": "Михаил",
@@ -56,7 +56,7 @@ const personGenerator = {
             "id_1": "Александров",
             "id_2": "Максимов",
             "id_3": "Иванов",
-            "id_4": "Артемов",
+            "id_4": "Артёмов",
             "id_5": "Дмитриев",
             "id_6": "Сергеев",
             "id_7": "Михаилов",
@@ -105,9 +105,9 @@ const personGenerator = {
         const prop = `id_${this.randomIntNumber(obj.count, 1)}`;  // this = personGenerator
         return obj.list[prop];
     },
-
+    //Генератор имен в зависимости от пола
     randomFirstName: function() {
-        if (this.person.gender ==  personGenerator.GENDER_MALE) {
+        if (this.person.gender ==  personGenerator.GENDER_MALE) {           //проверка пола  
            return this.randomValue(this.firstNameMaleJson); 
         }else {
             return this.randomValue(this.firstNameFemaleJson); 
@@ -148,8 +148,8 @@ const personGenerator = {
     },
     //генератор отчества, зависит от пола
     randomPatronymic: function () {
-      let patronymic = this.randomValue(this.patronymicJson);
-      (this.person.gender == personGenerator.GENDER_MALE) ? (patronymic = patronymic + "ич") : (patronymic = patronymic + "на")
+      let patronymic = this.randomValue(this.patronymicJson);           //генерируем отчество
+      (this.person.gender == personGenerator.GENDER_MALE) ? (patronymic = patronymic + "ич") : (patronymic = patronymic + "на")     //добавляем окончание в зависимости от пола
       return patronymic;
     },
     //генератор работы
@@ -164,26 +164,26 @@ const personGenerator = {
             return job;
         } 
     },
+    //трансформирование месяца из числа в текст
     monthToText: function () {
-        const month = JSON.parse(this.monthsJson);
-        const propmonth = `id_${this.person.month}`; 
+        const month = JSON.parse(this.monthsJson);  //список текстовых месяцев
+        const propmonth = `id_${this.person.month}`; //id месяца сопоставляется с сгенерированным числовым представлением
         return month.list[propmonth];
     },
 
     getPerson: function () {
         this.person = {};
-        this.person.gender = this.randomGender();
-        this.person.firstName = this.randomFirstName();
-        (this.person.gender == personGenerator.GENDER_MALE) ?        
-            (this.person.surname = this.randomSurname()) : (this.person.surname = this.randomSurname() + "а") ;
-        this.person.year = this.randomDateYear();
-        this.person.month = this.randomDatemonth();
-        this.person.monthText = this.monthToText();
-        this.person.day = this.randomDateDay();
-        this.person.patronymic = this.randomPatronymic();
+        this.person.gender = this.randomGender();               //пол
+        this.person.firstName = this.randomFirstName();         //имя
+        (this.person.gender == personGenerator.GENDER_MALE) ?       
+            (this.person.surname = this.randomSurname()) : (this.person.surname = this.randomSurname() + "а") ; //фамилия, в зависимости от пола добавляется окончание
+        this.person.year = this.randomDateYear();               //год рождения
+        this.person.month = this.randomDatemonth();             //месяц числовой
+        this.person.monthText = this.monthToText();             //месяц текстовый
+        this.person.day = this.randomDateDay();                 //день
+        this.person.patronymic = this.randomPatronymic();       //отчество
         (this.person.year > 1962 && this.person.year < 2004) ? 
-            (this.person.job = this.randomJob()) : (this.person.job = 'Нет'); //наличие работы ограничено датой рождения
-
+            (this.person.job = this.randomJob()) : (this.person.job = 'Нет'); //наличие работы ограничено датой рождения, если возраст больше 60 лет или меньше 18 - работы нет
         return this.person;
     }
 };
